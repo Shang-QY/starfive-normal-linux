@@ -16,6 +16,8 @@
 		mshc1 = &sdio1;
 		serial0 = &uart3;
 		serial1 = &uart0;
+        serial2 = &uart1;
+        serial3 = &uart2;
 	};
 
 	chosen {
@@ -427,6 +429,44 @@
 			slew-rate = <0>;
 		};
 	};
+
+    uart1_pins: uart1-0 {
+		rx-pins {
+			pinmux = <GPIOMUX(1, GPO_LOW, GPO_DISABLE,
+				  GPI_UART1_PAD_SIN)>;
+			bias-pull-up;
+			drive-strength = <14>;
+			input-enable;
+			input-schmitt-enable;
+		};
+		tx-pins {
+			pinmux = <GPIOMUX(3, GPO_UART1_PAD_SOUT,
+				  GPO_ENABLE, GPI_NONE)>;
+			bias-disable;
+			drive-strength = <35>;
+			input-disable;
+			input-schmitt-disable;
+		};
+	};
+
+    uart2_pins: uart2-0 {
+		rx-pins {
+			pinmux = <GPIOMUX(0, GPO_LOW, GPO_DISABLE,
+				  GPI_UART2_PAD_SIN)>;
+			bias-pull-up;
+			drive-strength = <14>;
+			input-enable;
+			input-schmitt-enable;
+		};
+		tx-pins {
+			pinmux = <GPIOMUX(2, GPO_UART2_PAD_SOUT,
+				  GPO_ENABLE, GPI_NONE)>;
+			bias-disable;
+			drive-strength = <35>;
+			input-disable;
+			input-schmitt-disable;
+		};
+	};
 };
 
 &i2c0 {
@@ -581,6 +621,18 @@
 &uart3 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&uart3_pins>;
+	status = "okay";
+};
+
+&uart1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart1_pins>;
+	status = "okay";
+};
+
+&uart2 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart2_pins>;
 	status = "okay";
 };
 
