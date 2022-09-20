@@ -14,6 +14,8 @@ obj-$(CONFIG_OF_RESOLVE)  += resolver.o
 obj-$(CONFIG_OF_OVERLAY) += overlay.o
 obj-$(CONFIG_OF_NUMA) += of_numa.o
 
+ccflags-y := -DDEBUG
+
 ifdef CONFIG_KEXEC_FILE
 ifdef CONFIG_OF_FLATTREE
 obj-y	+= kexec.o
