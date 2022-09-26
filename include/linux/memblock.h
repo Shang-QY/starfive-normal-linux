@@ -1,6 +1,8 @@
 /* SPDX-License-Identifier: GPL-2.0-or-later */
+
 #ifndef _LINUX_MEMBLOCK_H
 #define _LINUX_MEMBLOCK_H
+#define __KERNEL__
 #ifdef __KERNEL__
 
 /*

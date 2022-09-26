@@ -242,6 +242,7 @@ static void __init init_resources(void)
 
 static void __init parse_dtb(void)
 {
+    //Shangqy_trace
 	/* Early scan of device tree from init memory */
 	if (early_init_dt_scan(dtb_early_va)) {
 		const char *name = of_flat_dt_get_machine_name();
@@ -269,8 +270,10 @@ void __init setup_arch(char **cmdline_p)
 
 	early_ioremap_setup();
 	jump_label_init();
+    //Shangqy_trace
 	parse_early_param();
 
+    //Shangqy_trace
 	efi_init();
 	paging_init();
 #if IS_ENABLED(CONFIG_BUILTIN_DTB)

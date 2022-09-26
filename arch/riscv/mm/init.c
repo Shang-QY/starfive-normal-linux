@@ -20,6 +20,7 @@
 #include <linux/dma-map-ops.h>
 #include <linux/crash_dump.h>
 #include <linux/hugetlb.h>
+// #include <linux/printk.h>
 
 #include <asm/fixmap.h>
 #include <asm/tlbflush.h>
@@ -30,6 +31,9 @@
 #include <asm/numa.h>
 
 #include "../kernel/head.h"
+
+#define CONFIG_64BIT
+#define CONFIG_MMU
 
 struct kernel_mapping kernel_map __ro_after_init;
 EXPORT_SYMBOL(kernel_map);
@@ -441,6 +445,35 @@ void __init create_pgd_mapping(pgd_t *pgdp,
 	create_pgd_next_mapping(nextp, va, pa, sz, prot);
 }
 
+void __init create_pgd_mapping_debug(pgd_t *pgdp,
+				      uintptr_t va, phys_addr_t pa,
+				      phys_addr_t sz, pgprot_t prot)
+{
+	pgd_next_t *nextp;
+	phys_addr_t next_phys;
+	uintptr_t pgd_idx = pgd_index(va);
+
+	if (sz == PGDIR_SIZE) {
+		if (pgd_val(pgdp[pgd_idx]) == 0)
+			pgdp[pgd_idx] = pfn_pgd(PFN_DOWN(pa), prot);
+		return;
+	}
+
+	if (pgd_val(pgdp[pgd_idx]) == 0) {
+		next_phys = alloc_pgd_next(va);
+		pgdp[pgd_idx] = pfn_pgd(PFN_DOWN(next_phys), PAGE_TABLE);
+		nextp = get_pgd_next_virt(next_phys);
+        pr_info("[create_pgd_mapping] new pgd table, pgd_next_phys: %llx, pgd_next_virt: %lx\n", next_phys, (uintptr_t)nextp);
+		memset(nextp, 0, PAGE_SIZE);
+	} else {
+		next_phys = PFN_PHYS(_pgd_pfn(pgdp[pgd_idx]));
+		nextp = get_pgd_next_virt(next_phys);
+        pr_info("[create_pgd_mapping] old pgd table, pgd_next_phys: %llx, pgd_next_virt: %lx\n", next_phys, (uintptr_t)nextp);
+	}
+
+	create_pgd_next_mapping(nextp, va, pa, sz, prot);
+}
+
 static uintptr_t __init best_map_size(phys_addr_t base, phys_addr_t size)
 {
 	/* Upgrade to PMD_SIZE mappings whenever possible */
@@ -701,6 +734,7 @@ static void __init setup_vm_final(void)
 	uintptr_t va, map_size;
 	phys_addr_t pa, start, end;
 	u64 i;
+    pr_info("[setup_vm_final] Enter setup vm final\n");
 
 	/**
 	 * MMU is enabled at this point. But page table setup is not complete yet.
@@ -716,9 +750,11 @@ static void __init setup_vm_final(void)
 	create_pgd_mapping(swapper_pg_dir, FIXADDR_START,
 			   __pa_symbol(fixmap_pgd_next),
 			   PGDIR_SIZE, PAGE_TABLE);
+    pr_info("[setup_vm_final] Finish setup swapper, before for_each_mem_range\n");
 
 	/* Map all memory banks in the linear mapping */
 	for_each_mem_range(i, &start, &end) {
+        pr_info("[setup_vm_final] for_each_mem_range, start: %llx, end: %llx\n", start, end);
 		if (start >= end)
 			break;
 		if (start <= __pa(PAGE_OFFSET) &&
@@ -726,12 +762,14 @@ static void __init setup_vm_final(void)
 			start = __pa(PAGE_OFFSET);
 		if (end >= __pa(PAGE_OFFSET) + memory_limit)
 			end = __pa(PAGE_OFFSET) + memory_limit;
+        pr_info("[setup_vm_final] for_each_mem_range, start: %llx, end: %llx after check\n", start, end);
 
 		map_size = best_map_size(start, end - start);
 		for (pa = start; pa < end; pa += map_size) {
 			va = (uintptr_t)__va(pa);
+            pr_info("[setup_vm_final] for_map_size, pa: %llx, va: %lx, map_size: %lx\n", pa, va, map_size);
 
-			create_pgd_mapping(swapper_pg_dir, va, pa, map_size,
+			create_pgd_mapping_debug(swapper_pg_dir, va, pa, map_size,
 					   pgprot_from_va(va));
 		}
 	}

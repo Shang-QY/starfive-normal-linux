@@ -206,6 +206,7 @@ static __init void reserve_regions(void)
 	}
 }
 
+// Shangqy_trace
 void __init efi_init(void)
 {
 	struct efi_memory_map_data data;

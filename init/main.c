@@ -951,8 +951,10 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
 	 */
 	boot_cpu_init();
 	page_address_init();
+    // Shangqy_trace
 	pr_notice("%s", linux_banner);
 	early_security_init();
+    // Shangqy_trace
 	setup_arch(&command_line);
 	setup_boot_config();
 	setup_command_line(command_line);

@@ -18,6 +18,7 @@
 #include <asm/fixmap.h>
 #include <asm/early_ioremap.h>
 
+#define CONFIG_MMU
 #ifdef CONFIG_MMU
 static int early_ioremap_debug __initdata;
 

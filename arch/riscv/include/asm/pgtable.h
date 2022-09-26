@@ -11,6 +11,8 @@
 
 #include <asm/pgtable-bits.h>
 
+// #define CONFIG_MMU
+// #define CONFIG_64BIT
 #ifndef CONFIG_MMU
 #define KERNEL_LINK_ADDR	PAGE_OFFSET
 #else

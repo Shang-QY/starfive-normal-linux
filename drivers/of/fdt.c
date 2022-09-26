@@ -1275,6 +1275,7 @@ void __init early_init_dt_scan_nodes(void)
 	if (!rc)
 		pr_warn("No chosen node found, continuing without\n");
 
+    //Shangqy_trace
 	/* Setup memory, calling early_init_dt_add_memory_arch */
 	of_scan_flat_dt(early_init_dt_scan_memory, NULL);
 
