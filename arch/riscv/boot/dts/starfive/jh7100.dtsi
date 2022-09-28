@@ -19,9 +19,10 @@
 		#address-cells = <1>;
 		#size-cells = <0>;
 
-		cpu@0 {
+		cpu0: cpu@0 {
 			compatible = "sifive,u74-mc", "riscv";
 			reg = <0>;
+			opensbi-domain = <&udomain>;
 			d-cache-block-size = <64>;
 			d-cache-sets = <64>;
 			d-cache-size = <32768>;
@@ -37,6 +38,7 @@
 			next-level-cache = <&ccache>;
 			riscv,isa = "rv64imafdc";
 			starfive,itim = <&itim0>;
+			status = "okay";
 			tlb-split;
 
 			cpu0_intc: interrupt-controller {
@@ -46,9 +48,10 @@
 			};
 		};
 
-		cpu@1 {
+		cpu1: cpu@1 {
 			compatible = "sifive,u74-mc", "riscv";
 			reg = <1>;
+			opensbi-domain = <&tdomain>;
 			d-cache-block-size = <64>;
 			d-cache-sets = <64>;
 			d-cache-size = <32768>;
@@ -64,6 +67,7 @@
 			next-level-cache = <&ccache>;
 			riscv,isa = "rv64imafdc";
 			starfive,itim = <&itim1>;
+			status = "okay";
 			tlb-split;
 
 			cpu1_intc: interrupt-controller {
