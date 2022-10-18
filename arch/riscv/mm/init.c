@@ -832,8 +832,23 @@ static void __init reserve_crashkernel(void)
 
 void __init paging_init(void)
 {
+	unsigned long pa_start;
+    unsigned long pa_end;
+
 	setup_bootmem();
 	setup_vm_final();
+
+    printk("hello sqy\n");
+    pa_start = (unsigned long)__pa_symbol(&_start);
+    pa_end = (unsigned long)PFN_PHYS(max_low_pfn);
+    printk("pa start: 0x%lx\n", pa_start);
+    printk("pa end: 0x%lx   (%4ld MB)\n", pa_end, ((pa_end - pa_start) >> 20));
+
+    printk("linear va start(page offset): 0x%lx, and pa: 0x%lx\n", PAGE_OFFSET, __pa(PAGE_OFFSET));
+    printk("linear va end: 0x%lx\n", (unsigned long)(__va(PFN_PHYS(max_low_pfn))));
+
+    printk("kernel va start(kernel link addr): 0x%lx, and pa: 0x%lx\n", kernel_map.virt_addr, __pa(kernel_map.virt_addr));
+    printk("bye\n");
 }
 
 void __init misc_mem_init(void)
