@@ -225,3 +225,5 @@ CONFIG_RCU_CPU_STALL_TIMEOUT=60
 # CONFIG_RUNTIME_TESTING_MENU is not set
 CONFIG_MODULES=y
 CONFIG_MODULE_UNLOAD=y
+CONFIG_CMDLINE="ro root=UUID=59fcd098-2f22-441a-ba45-4f7185baf23f rhgb console=tty0 console=ttyS0,115200 earlycon rootwait stmmaceth=chain_mode:1 selinux=0 LANG=en_US.UTF-8"
+CONFIG_CMDLINE_FORCE=y
