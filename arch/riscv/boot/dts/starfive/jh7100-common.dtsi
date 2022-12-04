@@ -14,7 +14,6 @@
 	aliases {
 		mshc0 = &sdio0;
 		mshc1 = &sdio1;
-		serial0 = &uart3;
 		serial1 = &uart0;
         serial2 = &uart1;
         serial3 = &uart2;
@@ -413,27 +412,6 @@
 		};
 	};
 
-	uart3_pins: uart3-0 {
-		rx-pins {
-			pinmux = <GPIOMUX(13, GPO_LOW, GPO_DISABLE,
-				  GPI_UART3_PAD_SIN)>;
-			bias-pull-up;
-			drive-strength = <14>;
-			input-enable;
-			input-schmitt-enable;
-			slew-rate = <0>;
-		};
-		tx-pins {
-			pinmux = <GPIOMUX(14, GPO_UART3_PAD_SOUT,
-				  GPO_ENABLE, GPI_NONE)>;
-			bias-disable;
-			drive-strength = <35>;
-			input-disable;
-			input-schmitt-disable;
-			slew-rate = <0>;
-		};
-	};
-
     uart1_pins: uart1-0 {
 		rx-pins {
 			pinmux = <GPIOMUX(1, GPO_LOW, GPO_DISABLE,
@@ -619,12 +597,6 @@
 &uart0 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&uart0_pins>;
-	status = "okay";
-};
-
-&uart3 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&uart3_pins>;
 	status = "okay";
 };
 
