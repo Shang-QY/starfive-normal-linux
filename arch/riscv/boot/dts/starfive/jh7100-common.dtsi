@@ -59,35 +59,9 @@
 		};
 
         payload_reserved: mmode_resv0@80080000 {
-            reg = <0x1 0x80000000 0x1 0x0>;
+            reg = <0x0 0xc0000000 0x1 0xc0000000>;
         };
-
-		jpu_reserved: framebuffer@c9000000 {
-			reg = <0x0 0xc9000000 0x0 0x4000000>;
-		};
-
-		nvdla_reserved: framebuffer@d0000000 {
-			no-map;
-			reg = <0x0 0xd0000000 0x0 0x28000000>;
-		};
-
-		vin_reserved: framebuffer@f9000000 {
-			compatible = "shared-dma-pool";
-			no-map;
-			reg = <0x0 0xf9000000 0x0 0x1000000>;
-		};
-
-		sffb_reserved: framebuffer@fb000000 {
-			compatible = "shared-dma-pool";
-			no-map;
-			reg = <0x0 0xfb000000 0x0 0x2000000>;
-		};
 	};
-};
-
-&display {
-	memory-region = <&sffb_reserved>;
-	status = "okay";
 };
 
 &crtc {
